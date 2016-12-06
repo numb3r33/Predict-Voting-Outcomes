@@ -1,13 +1,28 @@
-%matplotlib inline
+from sklearn.preprocessing import LabelEncoder
 
-import pandas as pd
-import numpy as np
+def fill_missing_values(df):
+	df = df.copy()
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+	for cat in df.columns:
+		if cat == 'Party':
+			continue
+		if df[cat].isnull().any():
+			if df[cat].dtype == 'object':
+				df[cat] = df[cat].fillna('-999')
+			else:
+				df[cat] = df[cat].fillna(-9999)
+	return df
 
-np.random.seed(2016)
+def encode_cat_features(df):
+	df = df.copy()
 
-# load files
-train = pd.read_csv('./predict_voting_outcomes/data/train2016.csv')
-test = 
+	for cat in df.columns:
+		if cat == 'Party':
+			continue
+		if df[cat].dtype == 'object':
+			lbl = LabelEncoder()
+
+			lbl.fit(df[cat])
+			df[cat] = lbl.transform(df[cat])
+
+	return df
